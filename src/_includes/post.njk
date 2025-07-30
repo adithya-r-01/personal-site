@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or global.siteName }}</title>
+    <meta name="description" content="{{ description or global.description }}">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+  </head>
+  <body style="width: 100%; margin: 1pw; padding: 0;">
+    <main>
+      <h1><code>{{ title }}</code></h1>
+      <span style="display: flex; justify-content: begin; align-items: center;margin-bottom: 50px;">
+        <img src="/assets/img/{{ image }}" alt="{{ title }}" style="width: 30%; height: auto; border-radius: 10px; margin-right: 30px;">
+        <aside>
+            <p><strong>TL;DR:</strong> {{ tldr }}</p>
+            <div class="tag-container">
+                <strong>Tags:</strong>
+                {% for tag in tags %}
+                    <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            <p><strong>Word Count:</strong> {{ content | wordCount }}</p>
+        </aside>
+      </span>
+      {{ content | safe }}
+    </main>
+  </body>
+</html>
+<style>
+
+    p img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        max-width: 50%;
+        height: auto;
+    }
+
+    aside {
+        font-style: italic;
+        color: #666;
+        margin-top: 20px;
+        padding: 10px;
+        border-left: 4px solid #ccc;
+    }
+
+    blockquote {
+        font-style: italic;
+        color: #555;
+        border-left: 4px solid #ccc;
+        padding-left: 20px;
+        margin: 20px 0;
+        border-left: 4px solid #ccc;
+    }
+
+    pre {
+        background-color: #f4f4f4; /* light gray background */
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: monospace;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        border: 1px solid #ddd;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: #222;
+    }
+
+    pre code {
+        background: none !important;
+        padding: 0;
+        margin: 0;
+        font-size: inherit;
+        color: inherit;
+        font-family: inherit;
+    }
+
+    pre::before, pre::after {
+        content: "```";
+        color: #aaa;
+        display: block;
+        font-family: monospace;
+        margin-bottom: 0.5em;
+    }
+    pre::after {
+        margin-top: 0.5em;
+    }
+
+    iframe {
+        filter: brightness(0.95) contrast(1.05);
+        background: transparent;
+    }
+
+    .tag {
+        display: inline-block;
+        background-color: #696969;
+        color: #fff;
+        padding: 0.3em 0.6em;
+        border-radius: 999px;
+        font-family: inherit;
+        text-transform: lowercase;
+        letter-spacing: 0.5px;
+    }
+
+    .chess-embed {
+        border-radius: 5px;
+        padding: 1rem;
+        margin: 2rem 0;
+        height: 400px;        
+        font-family: monospace;
+    }
+
+    .chess-embed iframe {
+        border: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    table {
+        margin: 2rem auto;
+        border-collapse: collapse;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    table th,
+    table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+    }
+
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);">
+</script>

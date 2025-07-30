@@ -1,0 +1,218 @@
+---
+layout: base.njk
+title: Homepage
+eleventyNavigation:
+  key: Home
+  order: 1
+---
+
+<h1>Welcome to <code>{{ global.siteName }}</code></h1>
+<p><em>{{ global.description }}</em></p>
+
+<span class="center-body">
+<img id="profile-picture" src="/assets/img/profile-pic.png" alt="A profile picture">
+<div class="site-nav">
+    <h1><code>Posts:</code></h1>
+    <div class ="posts">
+        {% for post in collections.post %}
+            <div class="post-preview">
+                {% if post.data.image %}
+                    <a href="{{ post.data.permalink }}">
+                        <img width="50" class="post-thumbnail" src="/assets/img/{{ post.data.image }}" alt="{{ post.data.title }}" class="post-thumbnail">
+                    </a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <h1><code>About Me:</code></h1></li>
+    <p>Hi, I'm <strong>{{ global.author }}</strong>! Nice to meet you :), check out the links below:</p>
+    <div class="about-me">
+        <a href="https://www.linkedin.com/in/adithya-ramanujam/" target="_blank" rel="noopener noreferrer">
+            <img src="/assets/img/linkedin.svg" alt="LinkedIn" width="30" height="30"/>
+        </a>
+        <a href="https://github.com/adithya-r-01" target="_blank" rel="noopener noreferrer">
+            <img src="/assets/img/github.svg" alt="GitHub" width="30" height="30"/>
+        </a>
+        <a href="mailto:adithyaraman58@gmail.com">
+            <img src="/assets/img/mail.svg" alt="Mail" width="30" height="30"/>
+        </a>
+        <a href="/assets/resume/resume.txt" download>
+            <img src="/assets/img/resume.svg" alt="Resume" width="30" height="30"/>
+        </a>
+    </div>
+</div>
+</span>
+<div class="fun-links">
+    <h1><code>Things I Find Interesting:</code></h1>
+    <ul>
+        <li><a href="https://www.chess.com/" target="_blank" rel="noopener noreferrer">Chess.com</a></li>
+        <li><a href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer">Wikipedia</a></li>
+        <li><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+        <li><a href="https://www.reddit.com/" target="_blank" rel="noopener noreferrer">Reddit</a></li>
+    </ul>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <code>No Touching</code>
+  </div>
+</div>
+
+
+
+<style>
+
+    html, body {
+        height: 100%;
+        width: 90%;
+        max-width: 100%;
+        margin: 0;
+        padding: 1vw;
+    }
+
+    .center-body {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        width: 80vw;
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: none;
+        padding: 2.5rem;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-family: monospace;
+        position: relative;
+
+    }
+
+    .close {
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .site-nav {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about-me, .posts {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 1rem;
+        img {
+            transition: transform 0.3s ease;
+            &:hover {
+                transform: scale(1.5);
+            }
+        }
+    }
+
+    #profile-picture {
+        width: 30em;
+        height: 30em;
+        display: block;
+        margin: 1rem 0.5vw;
+        margin-left: 0.5vw
+        transform-origin: center center;
+        transition: transform 0.5s linear;
+        will-change: transform;
+        transform: rotateY(180deg);
+    }
+
+</style>
+
+<script>
+    const profile = document.getElementById("profile-picture");
+
+    function handleMouseMove(e) {
+
+        if (document.getElementById("modal").classList.contains("hidden") === false
+            || e.target.closest("#modal")) {
+            return;
+        }
+
+        const rect = profile.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        if (e.clientX < centerX) {
+            profile.style.transform = "rotateY(0deg)";
+            profile.src = "/assets/img/profile-pic-eyes-closed.png";
+            return;
+        } else {
+            profile.src = "/assets/img/profile-pic.png";
+        }
+
+        const dx = e.clientX - centerX;
+        const dy = e.clientY - centerY;
+
+        const angle = Math.atan2(dy, dx); 
+        const degrees = angle * (180 / Math.PI);
+
+        if (dx >= 0) {
+            profile.style.transform = `rotate(${degrees}deg) scaleX(1)`;
+        } else {
+            profile.style.transform = `rotate(${degrees}deg) scaleX(-1)`;
+        }
+    }
+
+    const postImages = document.querySelectorAll(".post-thumbnail");
+    postImages.forEach(image => {
+        image.addEventListener("mouseover", () => {
+            postImages.forEach(img => {
+                if (img !== image) {
+                    img.style.opacity = "0.5";
+                }
+            });
+        });
+        image.addEventListener("mouseout", () => {
+            postImages.forEach(img => {
+                img.style.opacity = "1";
+            });
+        });
+    });
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    profile.addEventListener("click", () => {
+        document.getElementById("modal").classList.remove("hidden");
+    });
+
+    document.querySelector(".close").addEventListener("click", () => {
+        document.getElementById("modal").classList.add("hidden");
+    });
+
+    document.getElementById("modal").addEventListener("click", (e) => {
+        if (e.target.id === "modal") {
+            document.getElementById("modal").classList.add("hidden");
+        }
+    });
+</script>
+
